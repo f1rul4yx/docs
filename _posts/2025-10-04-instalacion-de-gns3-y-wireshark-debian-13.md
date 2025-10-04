@@ -14,7 +14,9 @@ sudo apt install wireshark -y
 ```
 
 En el proceso de instalación aparecerá una opción:
+
 Debemos pulsar en “Sí”, ya que nos está preguntando si queremos poder usar Wireshark con un usuario sin privilegios de sudo.
+
 Para conseguir usar Wireshark sin privilegios sudo, también debemos dar permisos de ejecución para otros al archivo /usr/bin/dumpcap ya que este se encarga de la captura de paquetes y solo lo puede ejecutar el usuario root y los usuario del grupo wireshark, esto lo hacemos con el siguiente comando:
 
 ```bash
@@ -42,6 +44,7 @@ pipx ensurepath
 ```
 
 A continuación instalaré tres dependencias que no se pueden instalar en Debian 13 desde apt o pipx, por lo que las instalaré desde el repositorio de GitHub de cada una.
+
 El primer paquete es vpcs, que es el encargado de simular ordenadores virtuales.
 
 ```bash

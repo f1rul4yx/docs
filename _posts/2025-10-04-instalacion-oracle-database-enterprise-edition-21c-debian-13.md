@@ -183,5 +183,3 @@ Por último para poder conectarse remotamente será necesario ejecutar el siguie
 ```bash
 sqlplus usuario/password@//IP_DEL_SERVIDOR:1521/ORCLCDB
 ```
-
-Prueba
