@@ -130,6 +130,7 @@ sudo nano /opt/oracle/homes/OraDBHome21cEE/network/admin/listener.ora
 ![listener.ora](/assets/img/capturas/instalacion-oracle-database-enterprise-edition-21c-debian-13/listener.ora.png)
 
 Como se ve en la captura se debe cambiar lo que está despues de HOST por 0.0.0.0, esto indica cualquier dirección.
+
 También es recomendable modificar el archivo **tnsnames.ora** ya que este controla cómo el cliente se conecta al servidor.
 
 ```bash
@@ -139,6 +140,7 @@ sudo nano /opt/oracle/homes/OraDBHome21cEE/network/admin/tnsnames.ora
 ![tnsnames.ora](/assets/img/capturas/instalacion-oracle-database-enterprise-edition-21c-debian-13/tnsnames.ora.png)
 
 Como se ve en la captura se debe de cambiar lo mismo que en el archivo listener.ora.
+
 Para aplicar los cambios hay más de una forma pero yo lo que haré será reiniciar el servidor.
 
 ### Configuración del lado del cliente
