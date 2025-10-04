@@ -15,6 +15,7 @@ sudo apt install libaio1t64 libaio-dev unixodbc rlwrap wget -y
 ```
 
 > Antes para instalar Oracle Database en Debian 12 se necesitaba el paquete libaio1 pero en Debian 13 ese paquete ha cambiado de nombre (libaio1t64).
+
 > Como Oracle Database busca el fichero `/usr/lib/x86_64-linux-gnu/libaio.so.1` pero ese fichero en Debian 13 ahora se llama `/usr/lib/x86_64-linux-gnu/libaio.so.1t64` vamos a crear un enlace simbólico del archivo actual que se llame como el antiguo para que Oracle Database lo encuentre.
 
 ```bash
@@ -44,6 +45,7 @@ sudo usermod -aG dba $USER
 ```
 
 > El primer comando es útil, ya que Orale Database necesita resolver el nombre del host con una IP válida. Si no se configurara, la instalación fallaría y habría problemas al arrancar el listener.
+
 > Ahora como última configuración necesaria será asignar los alias para poder usar Oracle Database.
 
 ```bash
