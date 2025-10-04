@@ -7,7 +7,7 @@ repo=~/docs/
   git pull origin main
 
   which bundle
-  ~/gems/bin/bundle exec jekyll build 2>&1
+  ~/gems/bin/bundle exec ~/gems/bin/jekyll build 2>&1
 
   ls -l _site | head -n 10
 
