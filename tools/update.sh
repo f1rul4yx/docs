@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
-
 repo=~/docs/
 
-cd "$repo"
-git pull origin main
-bundle exec jekyll build
-sudo rm -r /var/www/html/*
-sudo cp -R _site/* /var/www/html/
-sudo chown -R www-data:www-data /var/www/html/
+{
+  echo "========== $(date) =========="
+  cd "$repo" || exit 1
+  git pull origin main
+
+  which bundle
+  bundle exec jekyll build 2>&1
+
+  ls -l _site | head -n 10
+
+  sudo rm -rf /var/www/html/*
+  sudo cp -R _site/* /var/www/html/
+  sudo chown -R www-data:www-data /var/www/html/
+} >> ~/update.log 2>&1
