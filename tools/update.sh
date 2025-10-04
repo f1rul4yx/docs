@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 repo=~/docs/
+export GEM_HOME="$HOME/gems"
+export PATH="$HOME/gems/bin:$PATH"
 
 {
   echo "========== $(date) =========="
@@ -7,7 +9,7 @@ repo=~/docs/
   git pull origin main
 
   which bundle
-  ~/gems/bin/bundle exec ~/gems/bin/jekyll build 2>&1
+  bundle exec jekyll build 2>&1
 
   ls -l _site | head -n 10
 
