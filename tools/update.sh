@@ -6,3 +6,4 @@ cd "$repo"
 git pull origin main
 bundle exec jekyll build
 sudo cp -R _site/* /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
