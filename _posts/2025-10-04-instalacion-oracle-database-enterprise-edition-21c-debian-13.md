@@ -29,7 +29,7 @@ Ahora realizaré la descarga del archivo .deb y la instalación del mismo.
 ```bash
 wget https://files.diegovargas.es/deb/oracle-database-ee-21c_1.0-2_amd64.deb
 sudo dpkg -i oracle-database-ee-21c_1.0-2_amd64.deb
-sudo rm -r oracle-database-ee-21c_1.0-2_amd64.deb
+rm -r oracle-database-ee-21c_1.0-2_amd64.deb
 ```
 
 > Oracle Database no proporciona archivo .deb pero si un archivo .rpm por lo que con ayuda del paquete alien he convertido el archivo .rpm a .deb.
