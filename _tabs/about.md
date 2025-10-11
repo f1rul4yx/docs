@@ -54,7 +54,7 @@ A medio plazo, me gustaría **especializarme en entornos Linux** y **ciberseguri
 Fuera del aula disfruto explorando nuevas tecnologías, automatizando tareas y resolviendo problemas prácticos.  
 Creo que la mejor forma de aprender es **experimentando y documentando**, y esta web refleja exactamente eso.
 
-![Avatar de Diego Vargas](/assets/img/favicons/logo.png){: .w-25 .rounded .shadow}
+![Avatar de Diego Vargas](/assets/img/favicons/logo.png){: .w-25}
 
 ---
 
