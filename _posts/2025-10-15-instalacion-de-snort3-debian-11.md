@@ -95,13 +95,13 @@ cd ../..
 - Copia el archivo de configuración de ejemplo:
 
 ```bash
-cp /usr/local/snort/etc/snort.lua /usr/local/snort/etc/snort.lua.bak
+cp /usr/local/snort/etc/snort/snort.lua /usr/local/snort/etc/snort/snort.lua.backup
 ```
 
 - Edita snort.lua según tu red y necesidades:
 
 ```bash
-nano /usr/local/snort/etc/snort.lua
+nano /usr/local/snort/etc/snort/snort.lua
 ```
 
 - Asegúrate de que las librerías estén en la ruta:
