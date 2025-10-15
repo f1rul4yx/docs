@@ -5,6 +5,12 @@ categories: [Linux, Instalación]
 tags: [snort3, linux]
 ---
 
+## Descarga de paquetes
+
+Lo primero será descargar los ficheros source de la web oficial de Snort como se ve en la siguiente captura:
+
+![web-snort](/assets/img/capturas/instalacion-de-snort3-debian-11/web-snort.png)
+
 ## Instalar dependencias del sistema
 
 ```bash
