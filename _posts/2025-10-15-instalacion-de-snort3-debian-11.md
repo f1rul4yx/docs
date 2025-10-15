@@ -38,7 +38,7 @@ cd ..
 ```bash
 cd snort3-libml-0e9247c
 ./configure.sh
-mkdir build && cd build
+cd build
 cmake ..
 make
 sudo make install
