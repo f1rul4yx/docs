@@ -51,7 +51,7 @@ cd ../..
 
 ```bash
 cd snort3-snort3-92185d9
-./configure_cmake.sh --prefix=/usr/local
+./configure_cmake.sh --prefix=/usr/local/snort
 cd build
 make
 sudo make install
@@ -61,7 +61,7 @@ cd ../..
 - Añade la ruta a la variable PATH para que el sistema encuentre el binario:
 
 ```bash
-echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
+echo 'export PATH=$PATH:/usr/local/snort/bin' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -76,7 +76,7 @@ snort --version
 - Añade la ruta de snort.pc a PKG_CONFIG_PATH:
 
 ```bash
-echo 'export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH' >> ~/.bashrc
+echo 'export PKG_CONFIG_PATH=/usr/local/snort/lib/pkgconfig:$PKG_CONFIG_PATH' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -88,7 +88,7 @@ pkg-config --modversion snort
 
 ```bash
 cd snort3-snort3_extra-114241b
-./configure_cmake.sh --prefix=/usr/local
+./configure_cmake.sh --prefix=/usr/local/snort
 cd build
 make
 sudo make install
@@ -102,13 +102,13 @@ cd ../..
 - Copia el archivo de configuración de ejemplo:
 
 ```bash
-cp /usr/local/etc/snort/snort.lua /usr/local/etc/snort/snort.lua.backup
+cp /usr/local/snort/etc/snort/snort.lua /usr/local/snort/etc/snort/snort.lua.backup
 ```
 
 - Edita snort.lua según tu red y necesidades:
 
 ```bash
-nano /usr/local/etc/snort/snort.lua
+nano /usr/local/snort/etc/snort/snort.lua
 ```
 
 - Asegúrate de que las librerías estén en la ruta:
