@@ -24,7 +24,7 @@ sudo apt install build-essential cmake libpcap-dev libpcre3-dev libdumbnet-dev b
 
 ```bash
 cd snort3-libdaq-22dab0c
-./bootstrap           # Genera el configure script
+./bootstrap
 ./configure
 make
 sudo make install
@@ -51,17 +51,24 @@ cd ../..
 
 ```bash
 cd snort3-snort3-92185d9
-./configure_cmake.sh --prefix=/usr/local/snort
+./configure_cmake.sh --prefix=/usr/local
 cd build
 make
 sudo make install
 cd ../..
 ```
 
+- Añade la ruta a la variable PATH para que el sistema encuentre el binario:
+
+```bash
+echo 'export PATH=$PATH:/usr/local/bin' >> ~/.bashrc
+source ~/.bashrc
+```
+
 - Verifica la instalación:
 
 ```bash
-/usr/local/snort/bin/snort --version
+snort --version
 ```
 
 ## Instalar Snort3 Extra (reglas y scripts)
@@ -69,7 +76,7 @@ cd ../..
 - Añade la ruta de snort.pc a PKG_CONFIG_PATH:
 
 ```bash
-echo 'export PKG_CONFIG_PATH=/usr/local/snort/lib/pkgconfig:$PKG_CONFIG_PATH' >> ~/.bashrc
+echo 'export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig:$PKG_CONFIG_PATH' >> ~/.bashrc
 source ~/.bashrc
 ```
 
@@ -81,7 +88,7 @@ pkg-config --modversion snort
 
 ```bash
 cd snort3-snort3_extra-114241b
-./configure_cmake.sh --prefix=/usr/local/snort
+./configure_cmake.sh --prefix=/usr/local
 cd build
 make
 sudo make install
@@ -95,17 +102,18 @@ cd ../..
 - Copia el archivo de configuración de ejemplo:
 
 ```bash
-cp /usr/local/snort/etc/snort/snort.lua /usr/local/snort/etc/snort/snort.lua.backup
+cp /usr/local/etc/snort/snort.lua /usr/local/etc/snort/snort.lua.backup
 ```
 
 - Edita snort.lua según tu red y necesidades:
 
 ```bash
-nano /usr/local/snort/etc/snort/snort.lua
+nano /usr/local/etc/snort/snort.lua
 ```
 
 - Asegúrate de que las librerías estén en la ruta:
 
 ```bash
-export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+echo 'export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH' >> ~/.bashrc
+source ~/.bashrc
 ```
