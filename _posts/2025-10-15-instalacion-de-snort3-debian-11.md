@@ -18,7 +18,7 @@ sudo apt update
 sudo apt install build-essential cmake libpcap-dev libpcre3-dev libdumbnet-dev bison flex zlib1g-dev libluajit-5.1-dev libssl-dev pkg-config autoconf automake libtool libhwloc-dev libpcre2-dev xz-utils liblzma-dev uuid-dev libunwind-dev libnuma-dev -y
 ```
 
-> Esto asegura que tengas todo lo necesario para compilar libdaq, libml y Snort.
+> Esto asegura que tengas todo lo necesario para compilar libdaq, libml, Snort y Snort Extra.
 
 ## Compilar e instalar libdaq
 
