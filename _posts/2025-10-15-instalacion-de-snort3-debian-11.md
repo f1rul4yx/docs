@@ -11,6 +11,8 @@ Lo primero será descargar los ficheros source de la [web oficial](https://www.s
 
 ![web-snort](/assets/img/capturas/instalacion-de-snort3-debian-11/web-snort.png)
 
+> Esta es una manera de descargar los componentes para la instalación de Snort3 pero yo voy a clonar los repositorios oficiales, por lo que el paso anterior me lo voy a saltar.
+
 ## Instalar dependencias del sistema
 
 ```bash
@@ -23,12 +25,13 @@ sudo apt install build-essential cmake libpcap-dev libpcre3-dev libdumbnet-dev b
 ## Compilar e instalar libdaq
 
 ```bash
-cd snort3-libdaq-22dab0c
+git clone https://github.com/snort3/libdaq.git
+cd libdaq/
 ./bootstrap
 ./configure
 make
 sudo make install
-cd ..
+cd ../
 ```
 
 > Esto instala libdaq en /usr/local/lib. Para que el sistema encuentre la librería: sudo ldconfig
@@ -36,13 +39,14 @@ cd ..
 ## Compilar e instalar libml
 
 ```bash
-cd snort3-libml-0e9247c
+git clone https://github.com/snort3/libml.git
+cd libml/
 ./configure.sh
-cd build
+cd build/
 cmake ..
 make
 sudo make install
-cd ../..
+cd ../../
 ```
 
 > Ejecutar sudo ldconfig nuevamente si el sistema no encuentra la librería.
@@ -50,12 +54,13 @@ cd ../..
 ## Compilar e instalar Snort 3
 
 ```bash
-cd snort3-snort3-92185d9
+git clone https://github.com/snort3/snort3.git
+cd snort3/
 ./configure_cmake.sh --prefix=/usr/local/snort
-cd build
+cd build/
 make
 sudo make install
-cd ../..
+cd ../../
 ```
 
 - Añade la ruta a la variable PATH para que el sistema encuentre el binario:
@@ -64,6 +69,8 @@ cd ../..
 echo 'export PATH=$PATH:/usr/local/snort/bin' >> ~/.bashrc
 source ~/.bashrc
 ```
+
+> Para poder usar el binario con el usuario root será necesario añadir el PATH también en el .bashrc del usuario root.
 
 - Verifica la instalación:
 
@@ -87,12 +94,13 @@ pkg-config --modversion snort
 ```
 
 ```bash
-cd snort3-snort3_extra-114241b
+git clone https://github.com/snort3/snort3_extra.git
+cd snort3_extra/
 ./configure_cmake.sh --prefix=/usr/local/snort
-cd build
+cd build/
 make
 sudo make install
-cd ../..
+cd ../../
 ```
 
 > Esto integrará las reglas y scripts extra a tu instalación de Snort.
