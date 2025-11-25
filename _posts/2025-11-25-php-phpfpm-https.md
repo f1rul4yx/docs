@@ -161,9 +161,9 @@ sudo apt install nginx mariadb php-fpm php-mysql -y
 
 - Algunas páginas que hacen eso son:
 
-  - (Winginx)[https://winginx.com/en/htaccess]
+  - [Winginx](https://winginx.com/en/htaccess)
 
-  - (GetPageSpeed)[https://www.getpagespeed.com/apache-to-nginx]
+  - [GetPageSpeed](https://www.getpagespeed.com/apache-to-nginx)
 
 - Para ejecutar nginx + php-fpm será necesario configurar el siguiente código que por defecto está comentado en el Virtual Host `default`:
 
@@ -198,7 +198,7 @@ location ~ \.php$ {
 
 Para obtener un certificado SSL sin complicación lo mejor será usar el agente `certbot` en el servidor:
 
-- (Paso a paso para usar certbot)[https://certbot.eff.org/]
+- [Paso a paso para usar certbot](https://certbot.eff.org/)
 
 > **Nota**: Será necesario indicar el servidor web y la instalación de certbot (snap recomendado).
 
