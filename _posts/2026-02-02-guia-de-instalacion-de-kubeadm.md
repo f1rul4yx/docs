@@ -5,8 +5,6 @@ categories: [Linux, Kubeadm]
 tags: [kubernetes, kubeadm, linux]
 ---
 
-# Guía de Instalación de kubeadm
-
 Guía paso a paso para instalar kubeadm en Linux, basada en la documentación oficial de Kubernetes.
 
 ---
