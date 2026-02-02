@@ -428,7 +428,3 @@ sudo swapoff -a
 - [Documentación oficial de kubeadm](https://kubernetes.io/docs/reference/setup-tools/kubeadm/)
 - [Instalación de kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
 - [Crear un clúster con kubeadm](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/)
-
----
-
-*Documento generado a partir de la documentación oficial de Kubernetes v1.35*
