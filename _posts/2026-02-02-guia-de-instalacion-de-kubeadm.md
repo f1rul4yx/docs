@@ -325,6 +325,35 @@ cgroupDriver: systemd
 
 ---
 
+## Paso 9: Crear enlace simbólico para plugins CNI
+
+**¿Por qué?** → Algunos componentes (como CoreDNS) buscan los plugins CNI en `/usr/lib/cni`, pero la instalación estándar los coloca en `/opt/cni/bin`. Sin este enlace, los pods de sistema como CoreDNS pueden quedarse en estado `ContainerCreating` o `CrashLoopBackOff`.
+
+Ejecutar en **todos los nodos** (control-plane y workers):
+
+```bash
+# Crear directorio si no existe
+sudo mkdir -p /usr/lib/cni
+
+# Crear enlaces simbólicos a los plugins CNI
+sudo ln -s /opt/cni/bin/* /usr/lib/cni/
+```
+
+Si ya habías inicializado el clúster y tienes pods en estado fallido:
+
+```bash
+# En el nodo control-plane, reiniciar kubelet
+sudo systemctl restart kubelet
+
+# Eliminar pods del sistema para que se regeneren
+kubectl delete pod -n kube-system --all
+
+# Si tienes ingress-nginx instalado
+kubectl delete pod -n ingress-nginx --all
+```
+
+---
+
 ## Verificación final
 
 Antes de ejecutar `kubeadm init`, verifica que todo esté listo:
@@ -343,6 +372,9 @@ free -h
 
 # Verificar que el runtime está funcionando
 sudo systemctl status containerd
+
+# Verificar que los enlaces CNI existen
+ls -la /usr/lib/cni/
 
 # Verificar versiones instaladas
 kubeadm version
@@ -397,6 +429,29 @@ Una vez completada la instalación, puedes:
 ---
 
 ## Troubleshooting común
+
+### CoreDNS o pods del sistema no arrancan (ContainerCreating)
+
+Problema típico: los plugins CNI están en `/opt/cni/bin` pero se buscan en `/usr/lib/cni`.
+
+```bash
+# Ver el estado de los pods del sistema
+kubectl get pods -n kube-system
+
+# Si CoreDNS está en ContainerCreating, verificar logs
+kubectl describe pod -n kube-system -l k8s-app=kube-dns
+```
+
+Solución (ejecutar en todos los nodos):
+
+```bash
+sudo mkdir -p /usr/lib/cni
+sudo ln -s /opt/cni/bin/* /usr/lib/cni/
+
+# En el control-plane
+sudo systemctl restart kubelet
+kubectl delete pod -n kube-system --all
+```
 
 ### El kubelet no arranca
 
