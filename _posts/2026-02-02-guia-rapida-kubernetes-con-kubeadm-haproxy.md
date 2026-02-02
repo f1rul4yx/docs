@@ -1,5 +1,5 @@
 ---
-title: Guía Rápida: Kubernetes con kubeadm + HAProxy
+title: Guía Rápida Kubernetes con kubeadm + HAProxy
 date: 2026-02-02 13:15:00 +0200
 categories: [Linux, Kubeadm]
 tags: [kubernetes, kubeadm, linux]
