@@ -275,6 +275,133 @@ Una vez completada la instalación, puedes:
 
 ---
 
+## Balanceador de carga con HAProxy
+
+Para distribuir el tráfico entre los nodos worker, puedes usar HAProxy en una máquina separada.
+
+### 1. Instalar HAProxy
+
+```bash
+sudo apt-get update
+sudo apt-get install -y haproxy
+```
+
+### 2. Obtener el NodePort del ingress
+
+Desde el master:
+
+```bash
+kubectl get svc -n ingress-nginx ingress-nginx-controller
+```
+
+Verás algo como:
+
+```
+NAME                       TYPE       CLUSTER-IP     PORT(S)                      
+ingress-nginx-controller   NodePort   10.96.x.x      80:31080/TCP,443:31443/TCP
+```
+
+Anota los puertos (en el ejemplo: 31080 para HTTP, 31443 para HTTPS).
+
+### 3. Configurar HAProxy
+
+Edita `/etc/haproxy/haproxy.cfg`:
+
+```bash
+sudo nano /etc/haproxy/haproxy.cfg
+```
+
+Añade al final (cambia los NodePorts e IPs por los tuyos):
+
+```haproxy
+#---------------------------------------------------------------------
+# Frontend HTTP
+#---------------------------------------------------------------------
+frontend http_front
+    bind *:80
+    default_backend http_back
+
+#---------------------------------------------------------------------
+# Frontend HTTPS
+#---------------------------------------------------------------------
+frontend https_front
+    bind *:443
+    mode tcp
+    default_backend https_back
+
+#---------------------------------------------------------------------
+# Backend HTTP - Workers de Kubernetes
+#---------------------------------------------------------------------
+backend http_back
+    balance roundrobin
+    server k8s-worker1 <IP_WORKER1>:31080 check
+    server k8s-worker2 <IP_WORKER2>:31080 check
+
+#---------------------------------------------------------------------
+# Backend HTTPS - Workers de Kubernetes
+#---------------------------------------------------------------------
+backend https_back
+    mode tcp
+    balance roundrobin
+    server k8s-worker1 <IP_WORKER1>:31443 check
+    server k8s-worker2 <IP_WORKER2>:31443 check
+
+#---------------------------------------------------------------------
+# Estadísticas (opcional)
+#---------------------------------------------------------------------
+listen stats
+    bind *:8404
+    stats enable
+    stats uri /stats
+    stats refresh 10s
+```
+
+Reemplaza:
+- `<IP_WORKER1>` → IP de k8s-worker1
+- `<IP_WORKER2>` → IP de k8s-worker2
+- `31080` y `31443` → Los NodePorts que obtuviste
+
+### 4. Reiniciar HAProxy
+
+```bash
+# Verificar sintaxis
+sudo haproxy -c -f /etc/haproxy/haproxy.cfg
+
+# Reiniciar y habilitar
+sudo systemctl restart haproxy
+sudo systemctl enable haproxy
+```
+
+### 5. Configurar acceso
+
+Añade en el `/etc/hosts` de tu máquina cliente:
+
+```
+<IP_HAPROXY>  django-tutorial.local
+```
+
+Luego accede a `http://django-tutorial.local`.
+
+### 6. Verificar el balanceo
+
+**Panel de estadísticas:**
+
+Accede a `http://<IP_HAPROXY>:8404/stats` para ver el estado de los backends.
+
+**Probar con curl:**
+
+```bash
+curl -H "Host: django-tutorial.local" http://<IP_HAPROXY>
+```
+
+**Ver logs de los pods:**
+
+```bash
+kubectl logs -f -l app=django-tutorial -n django-tutorial
+```
+
+---
+
 ## Troubleshooting común
 
 ### CoreDNS o pods del sistema no arrancan (ContainerCreating)
