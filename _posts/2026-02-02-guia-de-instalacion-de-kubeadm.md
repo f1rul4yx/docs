@@ -5,7 +5,7 @@ categories: [Linux, Kubeadm]
 tags: [kubernetes, kubeadm, linux]
 ---
 
-Guía paso a paso para instalar kubeadm en Linux, basada en la documentación oficial de Kubernetes.
+Guía paso a paso para instalar kubeadm en Linux sin gestor de paquetes.
 
 ---
 
@@ -15,8 +15,6 @@ Guía paso a paso para instalar kubeadm en Linux, basada en la documentación of
 
 - `kubeadm init` → Inicializa el nodo maestro (control plane)
 - `kubeadm join` → Une nodos trabajadores al clúster
-
-kubeadm se encarga únicamente del **bootstrapping** (arranque inicial) del clúster, no de aprovisionar máquinas ni instalar addons adicionales.
 
 ---
 
@@ -30,71 +28,9 @@ kubeadm se encarga únicamente del **bootstrapping** (arranque inicial) del clú
 
 ---
 
-## Requisitos previos
-
-### Hardware mínimo
-
-| Recurso | Requisito |
-|---------|-----------|
-| RAM | 2 GB mínimo |
-| CPU | 2 cores (para nodos control plane) |
-| Red | Conectividad completa entre todos los nodos |
-
-### Requisitos del sistema
-
-Cada nodo debe tener:
-
-- **Hostname único**
-- **MAC address única**
-- **product_uuid único**
-
-Para verificar esto:
-
-```bash
-# Ver MAC address
-ip link
-
-# Ver product_uuid
-sudo cat /sys/class/dmi/id/product_uuid
-```
-
----
-
-## Paso 1: Verificar puertos necesarios
-
-Kubernetes necesita ciertos puertos abiertos para la comunicación entre componentes.
-
-### Nodo Control Plane (Maestro)
-
-| Puerto | Protocolo | Uso |
-|--------|-----------|-----|
-| 6443 | TCP | API Server |
-| 2379-2380 | TCP | etcd |
-| 10250 | TCP | Kubelet API |
-| 10259 | TCP | kube-scheduler |
-| 10257 | TCP | kube-controller-manager |
-
-### Nodos Worker
-
-| Puerto | Protocolo | Uso |
-|--------|-----------|-----|
-| 10250 | TCP | Kubelet API |
-| 10256 | TCP | kube-proxy |
-| 30000-32767 | TCP | NodePort Services |
-
-Para verificar si un puerto está abierto:
-
-```bash
-nc 127.0.0.1 6443 -zv -w 2
-```
-
----
-
-## Paso 2: Configurar Swap
+## Paso 1: Configurar Swap
 
 **¿Por qué?** → El kubelet por defecto no arranca si detecta swap activo, ya que puede afectar al rendimiento y la predicción de recursos de los contenedores.
-
-### Opción A: Desactivar Swap (recomendado)
 
 ```bash
 # Desactivar swap temporalmente
@@ -104,27 +40,11 @@ sudo swapoff -a
 sudo sed -i '/ swap / s/^/#/' /etc/fstab
 ```
 
-### Opción B: Tolerar Swap
-
-Si necesitas mantener swap, añade en la configuración del kubelet:
-
-```yaml
-failSwapOn: false
-```
-
 ---
 
-## Paso 3: Instalar un Container Runtime
+## Paso 2: Instalar un Container Runtime
 
 **¿Por qué?** → Kubernetes necesita un runtime de contenedores para ejecutar los pods. Kubernetes usa la interfaz CRI (Container Runtime Interface) para comunicarse con el runtime.
-
-### Runtimes compatibles
-
-| Runtime | Socket |
-|---------|--------|
-| containerd | `unix:///var/run/containerd/containerd.sock` |
-| CRI-O | `unix:///var/run/crio/crio.sock` |
-| Docker + cri-dockerd | `unix:///var/run/cri-dockerd.sock` |
 
 ### Instalar containerd (recomendado)
 
@@ -145,11 +65,9 @@ sudo systemctl restart containerd
 sudo systemctl enable containerd
 ```
 
-> **Nota:** Docker Engine no implementa CRI directamente. Si usas Docker, necesitas instalar `cri-dockerd` como puente.
-
 ---
 
-## Paso 4: Cargar módulos del kernel necesarios
+## Paso 3: Cargar módulos del kernel necesarios
 
 **¿Por qué?** → Kubernetes necesita ciertos módulos del kernel para el networking entre contenedores.
 
@@ -172,7 +90,7 @@ sudo modprobe br_netfilter
 
 ---
 
-## Paso 5: Configurar parámetros de red del kernel
+## Paso 4: Configurar parámetros de red del kernel
 
 **¿Por qué?** → Permite que los paquetes de red sean procesados correctamente entre pods.
 
@@ -195,59 +113,7 @@ sudo sysctl --system
 
 ---
 
-## Paso 6: Instalar kubeadm, kubelet y kubectl
-
-### Para distribuciones basadas en Debian/Ubuntu
-
-```bash
-# 1. Instalar dependencias
-sudo apt-get update
-sudo apt-get install -y apt-transport-https ca-certificates curl gpg
-
-# 2. Añadir la clave GPG del repositorio de Kubernetes
-# (Crea el directorio si no existe)
-sudo mkdir -p -m 755 /etc/apt/keyrings
-
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.35/deb/Release.key | \
-    sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-
-# 3. Añadir el repositorio de Kubernetes
-echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.35/deb/ /' | \
-    sudo tee /etc/apt/sources.list.d/kubernetes.list
-
-# 4. Instalar los paquetes
-sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
-
-# 5. Bloquear versiones para evitar actualizaciones automáticas
-# (Las actualizaciones de Kubernetes requieren un proceso especial)
-sudo apt-mark hold kubelet kubeadm kubectl
-```
-
-### Para distribuciones basadas en Red Hat/CentOS/Fedora
-
-```bash
-# 1. Configurar SELinux en modo permisivo
-# (Necesario para que los contenedores accedan al filesystem del host)
-sudo setenforce 0
-sudo sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
-
-# 2. Añadir el repositorio de Kubernetes
-cat <<EOF | sudo tee /etc/yum.repos.d/kubernetes.repo
-[kubernetes]
-name=Kubernetes
-baseurl=https://pkgs.k8s.io/core:/stable:/v1.35/rpm/
-enabled=1
-gpgcheck=1
-gpgkey=https://pkgs.k8s.io/core:/stable:/v1.35/rpm/repodata/repomd.xml.key
-exclude=kubelet kubeadm kubectl cri-tools kubernetes-cni
-EOF
-
-# 3. Instalar los paquetes
-sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
-```
-
-### Instalación manual (sin gestor de paquetes)
+## Paso 5: Instalar kubeadm, kubelet y kubectl
 
 ```bash
 # 1. Instalar plugins CNI (necesarios para la red de pods)
@@ -286,7 +152,7 @@ rm kubectl
 
 ---
 
-## Paso 7: Habilitar el servicio kubelet
+## Paso 6: Habilitar el servicio kubelet
 
 **¿Por qué?** → El kubelet debe estar activo para que kubeadm pueda configurarlo durante la inicialización del clúster.
 
@@ -298,36 +164,7 @@ sudo systemctl enable --now kubelet
 
 ---
 
-## Paso 8: Configurar el cgroup driver
-
-**¿Por qué?** → El container runtime y el kubelet deben usar el mismo cgroup driver para gestionar recursos correctamente. Si no coinciden, el kubelet fallará.
-
-Los cgroup drivers disponibles son:
-
-- `cgroupfs` → Driver nativo
-- `systemd` → Usa systemd para gestionar cgroups (recomendado en sistemas con systemd)
-
-### Verificar el cgroup driver del runtime
-
-Para containerd:
-
-```bash
-containerd config dump | grep SystemdCgroup
-```
-
-### Configurar kubelet para usar systemd
-
-Crea o edita `/var/lib/kubelet/config.yaml`:
-
-```yaml
-apiVersion: kubelet.config.k8s.io/v1beta1
-kind: KubeletConfiguration
-cgroupDriver: systemd
-```
-
----
-
-## Paso 9: Crear enlace simbólico para plugins CNI
+## Paso 7: Crear enlace simbólico para plugins CNI
 
 **¿Por qué?** → Algunos componentes (como CoreDNS) buscan los plugins CNI en `/usr/lib/cni`, pero la instalación estándar los coloca en `/opt/cni/bin`. Sin este enlace, los pods de sistema como CoreDNS pueden quedarse en estado `ContainerCreating` o `CrashLoopBackOff`.
 
@@ -392,7 +229,7 @@ Una vez completada la instalación, puedes:
 
 1. **Inicializar el nodo maestro:**
    ```bash
-   sudo kubeadm init --pod-network-cidr=192.168.0.0/16
+   sudo kubeadm init --pod-network-cidr=10.244.0.0/16
    ```
 
 2. **Configurar kubectl para tu usuario:**
@@ -404,11 +241,9 @@ Una vez completada la instalación, puedes:
 
 3. **Instalar un plugin de red (CNI):**
    ```bash
-   # Calico (el más usado en producción, soporta Network Policies)
-   kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
+   # Flannel
+   kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
    ```
-
-   > **Nota:** Calico usa por defecto el CIDR `192.168.0.0/16`. Si en el paso anterior usaste otro CIDR, descarga el manifiesto, edita `CALICO_IPV4POOL_CIDR` y aplícalo.
 
 4. **Instalar NGINX Ingress Controller:**
    ```bash
@@ -437,54 +272,6 @@ Una vez completada la instalación, puedes:
 | `kubeadm upgrade` | Actualiza el clúster |
 | `kubeadm certs` | Gestiona certificados |
 | `kubeadm version` | Muestra la versión |
-
----
-
-## Network Policies (con Calico)
-
-Al usar Calico puedes definir reglas de firewall entre pods. Por defecto todos los pods pueden comunicarse entre sí. Con Network Policies restringes el tráfico.
-
-### Ejemplo: Proteger una base de datos
-
-Solo permitir que los pods con label `app: django-tutorial` accedan a MariaDB:
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: mariadb-policy
-  namespace: django-tutorial
-spec:
-  podSelector:
-    matchLabels:
-      app: mariadb
-  policyTypes:
-    - Ingress
-  ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-              app: django-tutorial
-      ports:
-        - port: 3306
-```
-
-### Ejemplo: Denegar todo el tráfico por defecto en un namespace
-
-```yaml
-apiVersion: networking.k8s.io/v1
-kind: NetworkPolicy
-metadata:
-  name: deny-all
-  namespace: django-tutorial
-spec:
-  podSelector: {}
-  policyTypes:
-    - Ingress
-    - Egress
-```
-
-Después añades políticas específicas para permitir solo el tráfico necesario.
 
 ---
 
