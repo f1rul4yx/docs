@@ -392,7 +392,7 @@ Una vez completada la instalación, puedes:
 
 1. **Inicializar el nodo maestro:**
    ```bash
-   sudo kubeadm init --pod-network-cidr=10.244.0.0/16
+   sudo kubeadm init --pod-network-cidr=192.168.0.0/16
    ```
 
 2. **Configurar kubectl para tu usuario:**
@@ -404,11 +404,21 @@ Una vez completada la instalación, puedes:
 
 3. **Instalar un plugin de red (CNI):**
    ```bash
-   # Ejemplo con Flannel
-   kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+   # Calico (el más usado en producción, soporta Network Policies)
+   kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/calico.yaml
    ```
 
-4. **Unir nodos worker al clúster:**
+   > **Nota:** Calico usa por defecto el CIDR `192.168.0.0/16`. Si en el paso anterior usaste otro CIDR, descarga el manifiesto, edita `CALICO_IPV4POOL_CIDR` y aplícalo.
+
+4. **Instalar NGINX Ingress Controller:**
+   ```bash
+   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.12.0/deploy/static/provider/baremetal/deploy.yaml
+   
+   # Verificar que está corriendo
+   kubectl get pods -n ingress-nginx
+   ```
+
+5. **Unir nodos worker al clúster:**
    ```bash
    # Usar el comando que devuelve kubeadm init
    kubeadm join <master-ip>:6443 --token <token> --discovery-token-ca-cert-hash sha256:<hash>
@@ -427,6 +437,54 @@ Una vez completada la instalación, puedes:
 | `kubeadm upgrade` | Actualiza el clúster |
 | `kubeadm certs` | Gestiona certificados |
 | `kubeadm version` | Muestra la versión |
+
+---
+
+## Network Policies (con Calico)
+
+Al usar Calico puedes definir reglas de firewall entre pods. Por defecto todos los pods pueden comunicarse entre sí. Con Network Policies restringes el tráfico.
+
+### Ejemplo: Proteger una base de datos
+
+Solo permitir que los pods con label `app: django-tutorial` accedan a MariaDB:
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mariadb-policy
+  namespace: django-tutorial
+spec:
+  podSelector:
+    matchLabels:
+      app: mariadb
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: django-tutorial
+      ports:
+        - port: 3306
+```
+
+### Ejemplo: Denegar todo el tráfico por defecto en un namespace
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all
+  namespace: django-tutorial
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+```
+
+Después añades políticas específicas para permitir solo el tráfico necesario.
 
 ---
 
