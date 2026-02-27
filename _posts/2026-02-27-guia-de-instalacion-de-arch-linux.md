@@ -196,7 +196,7 @@ swapon /dev/mapper/vg0-swap
 
 ```bash
 pacman -Sy reflector
-reflector --country Spain,France,Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
+reflector --protocol http --country Spain,France,Germany --latest 10 --sort rate --save /etc/pacman.d/mirrorlist
 ```
 
 ### Instalar paquetes base
