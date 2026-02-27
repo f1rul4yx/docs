@@ -3,9 +3,6 @@ title: Instalación servidor ssh Windows 11
 date: 2025-10-08 22:26:00 +0200
 categories: [Windows, Instalación]
 tags: [ssh, windows]
-image:
-  path: /assets/img/capturas/instalacion-servidor-ssh-windows-11/portada.png
-  alt: "Instalación servidor ssh Windows 11"
 ---
 
 A continuación voy a explicar como instalar el servidor ssh en Windows 11 para poder conectarnos a el.

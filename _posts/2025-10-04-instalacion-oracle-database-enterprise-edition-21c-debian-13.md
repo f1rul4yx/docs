@@ -3,9 +3,6 @@ title: Instalación Oracle Database Enterprise Edition 21c (Debian 13)
 date: 2025-10-04 19:12:00 +0200
 categories: [Linux, Instalación]
 tags: [oracle, database, linux]
-image:
-  path: /assets/img/capturas/instalacion-oracle-database-enterprise-edition-21c-debian-13/portada.png
-  alt: "Instalación Oracle Database Enterprise Edition 21c (Debian 13)"
 ---
 
 ## Instalación de dependencias
