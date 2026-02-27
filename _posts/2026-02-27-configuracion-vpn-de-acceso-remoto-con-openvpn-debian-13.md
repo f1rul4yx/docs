@@ -1,6 +1,5 @@
 ---
 title: Configuración VPN de acceso remoto con OpenVPN (Debian 13)
-description: Guía completa para configurar una VPN de acceso remoto con OpenVPN en una VM de Proxmox, permitiendo conectarte a toda tu red local desde cualquier lugar.
 date: 2026-02-27 16:40:00 +0200
 categories: [Linux, Configuración]
 tags: [vpn, openvpn, linux]
