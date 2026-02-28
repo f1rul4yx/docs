@@ -1,8 +1,8 @@
 ---
 title: Compilación de un Kernel Linux
 date: 2026-01-20 19:37:00 +0200
-categories: [Linux, Customizer]
-tags: [customizer, kernel, linux]
+categories: [Linux, Kernel]
+tags: [kernel, linux, secure-boot, efi-stub, compilation, mok, uefi]
 ---
 
 En este tutorial vamos a aprender a compilar un kernel Linux desde cero, firmarlo para que funcione con Secure Boot y configurar un arranque directo mediante EFI Stub, saltándonos GRUB completamente. Este proceso nos permite tener un control total sobre nuestro sistema operativo y entender cómo funciona el arranque de Linux a bajo nivel.

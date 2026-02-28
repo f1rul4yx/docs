@@ -1,8 +1,8 @@
 ---
 title: Configuración acceso remoto Oracle Database Enterprise Edition 21c (Debian 13)
 date: 2025-10-08 21:58:00 +0200
-categories: [Linux, Configuración]
-tags: [oracle, database, linux]
+categories: [Databases, Oracle]
+tags: [oracle, database, debian, linux, remote-access, sqlplus]
 ---
 
 Aquí voy a explicar como configurar el servidor para que acepte conexiones remotas y un cliente para que se puede conectar.

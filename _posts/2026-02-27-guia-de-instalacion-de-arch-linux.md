@@ -2,7 +2,7 @@
 title: "Guía de Instalación de Arch Linux"
 date: 2026-02-27 14:59:00 +0200
 categories: [Linux, Arch Linux]
-tags: [arch, instalacion, linux]
+tags: [arch-linux, linux, installation, lvm, grub, uefi, aur]
 ---
 
 Guía completa para instalar Arch Linux desde cero siguiendo la documentación oficial, con soporte para particionado estándar y LVM.

@@ -1,8 +1,8 @@
 ---
 title: "Instalación de Drivers NVIDIA en Arch Linux"
 date: 2026-02-28 02:01:00 +0200
-categories: [Linux, Instalación]
-tags: [nvidia, drivers, arch]
+categories: [Linux, Drivers]
+tags: [nvidia, drivers, arch-linux, linux, wayland, gpu, kernel-module]
 ---
 
 Guía para instalar los drivers propietarios de NVIDIA en Arch Linux, explicando el porqué de cada paso y cómo verificar que todo funciona correctamente.

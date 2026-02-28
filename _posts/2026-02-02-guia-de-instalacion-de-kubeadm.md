@@ -1,8 +1,8 @@
 ---
 title: Guía de Instalación de kubeadm
 date: 2026-02-02 13:15:00 +0200
-categories: [Linux, Kubeadm]
-tags: [kubernetes, kubeadm, linux]
+categories: [DevOps, Kubernetes]
+tags: [kubernetes, kubeadm, containerd, cni, haproxy, debian, linux]
 ---
 
 Guía paso a paso para instalar kubeadm en Linux sin gestor de paquetes.
