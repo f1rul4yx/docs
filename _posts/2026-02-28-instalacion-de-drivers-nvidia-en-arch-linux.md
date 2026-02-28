@@ -1,5 +1,5 @@
 ---
-title: "Instalación de Drivers NVIDIA en Arch Linux"
+title: Instalación de Drivers NVIDIA en Arch Linux
 date: 2026-02-28 02:01:00 +0200
 categories: [Linux, Drivers]
 tags: [nvidia, drivers, arch-linux, linux, wayland, gpu, kernel-module]

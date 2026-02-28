@@ -1,5 +1,5 @@
 ---
-title: "Guía de Instalación de Arch Linux"
+title: Guía de Instalación de Arch Linux
 date: 2026-02-27 14:59:00 +0200
 categories: [Linux, Arch Linux]
 tags: [arch-linux, linux, installation, lvm, grub, uefi, aur]
