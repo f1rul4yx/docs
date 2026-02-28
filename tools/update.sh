@@ -6,6 +6,6 @@ repo=~/docs/
 
 cd "$repo"
 git pull origin main
-bundle exec jekyll build
+JEKYLL_ENV=production bundle exec jekyll build
 sudo rsync -av --delete _site/ /var/www/html/
 sudo chown -R www-data:www-data /var/www/html/
