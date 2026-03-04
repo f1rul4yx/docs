@@ -6,6 +6,8 @@ repo=~/docs/
 
 cd "$repo"
 
+echo "--- $(date '+%Y-%m-%d %H:%M:%S') ---"
+
 BEFORE=$(git rev-parse HEAD)
 git pull origin main
 AFTER=$(git rev-parse HEAD)
