@@ -1,8 +1,8 @@
 ---
 title: Instalación de Snort3 (Debian 11)
 date: 2025-10-15 19:48:00 +0200
-categories: [Security, IDS]
-tags: [snort, ids, ips, debian, linux, network-security, intrusion-detection]
+categories: [Seguridad, IDS]
+tags: [snort, ids, ips, debian, linux, seguridad-red, deteccion-intrusiones]
 ---
 
 ## Descarga de paquetes

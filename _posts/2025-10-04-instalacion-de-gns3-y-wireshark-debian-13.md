@@ -1,8 +1,8 @@
 ---
 title: Instalación de GNS3 y Wireshark (Debian 13)
 date: 2025-10-04 18:29:00 +0200
-categories: [Networking, Tools]
-tags: [gns3, wireshark, debian, linux, network-simulation, packet-capture]
+categories: [Redes, Herramientas]
+tags: [gns3, wireshark, debian, linux, simulacion-red, captura-paquetes]
 ---
 
 ## Instalación Wireshark

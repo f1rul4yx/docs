@@ -2,7 +2,7 @@
 title: Instalación y Configuración de Immich con Docker
 date: 2026-03-16 10:48:00 +0200
 categories: [Linux, Instalación]
-tags: [immich, docker, linux, selfhosted, nginx]
+tags: [immich, docker, linux, autoalojado, nginx]
 ---
 
 Guía completa para instalar Immich con Docker Compose y configurar un proxy inverso nginx con SSL para acceso externo.

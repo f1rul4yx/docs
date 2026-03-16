@@ -1,8 +1,8 @@
 ---
 title: Monitorización web con Umami
 date: 2026-02-28 12:03:00 +0200
-categories: [Monitoring, Analytics]
-tags: [umami, analytics, docker, self-hosted, privacy, postgresql]
+categories: [Monitorización, Analítica]
+tags: [umami, analitica, docker, autoalojado, privacidad, postgresql]
 ---
 
 En este tutorial vamos a instalar y configurar **Umami**, una plataforma de analítica web open source y self-hosted que nos permite monitorizar las visitas de cualquier web sin depender de servicios externos como Google Analytics.

@@ -1,7 +1,7 @@
 ---
 title: Configuración VPN de acceso remoto con OpenVPN (Debian 13)
 date: 2026-02-27 16:40:00 +0200
-categories: [Security, VPN]
+categories: [Seguridad, VPN]
 tags: [openvpn, vpn, pki, easy-rsa, iptables, debian, linux, proxmox]
 ---
 

@@ -1,8 +1,8 @@
 ---
 title: Instalación servidor ssh Windows 11
 date: 2025-10-08 22:26:00 +0200
-categories: [Windows, Administration]
-tags: [ssh, openssh, windows, windows-11, remote-access, powershell, firewall]
+categories: [Windows, Administración]
+tags: [ssh, openssh, windows, windows-11, acceso-remoto, powershell, firewall]
 ---
 
 A continuación voy a explicar como instalar el servidor ssh en Windows 11 para poder conectarnos a el.
