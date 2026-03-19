@@ -60,33 +60,38 @@ Opcionalmente puedes personalizar el bot:
 
 ---
 
-## Paso 2: Crear un grupo de Telegram y añadir el bot
+## Paso 2: Crear un canal de Telegram y añadir el bot
 
-Crear un grupo en vez de un canal es más sencillo ya que permite añadir al bot como participante directamente durante la creación:
+La forma más sencilla de crear un canal con el bot ya configurado como administrador es usando el enlace de invitación directa. Abre el siguiente enlace en un dispositivo con la app de Telegram instalada, sustituyendo `NOMBRE_DEL_BOT` por el `@username` de tu bot:
 
-1. En Telegram → **Nuevo Grupo**
-2. Cuando te pida añadir miembros, busca tu bot por su `@username` y añádelo
-3. Pon el nombre que quieras al grupo
-4. Añade a las personas que quieran recibir las notificaciones
+```
+https://t.me/NOMBRE_DEL_BOT?startchannel&admin=post_messages
+```
 
-Una vez creado el grupo, es recomendable hacer al bot **administrador** con permiso de "Enviar mensajes" para asegurar que siempre pueda publicar aunque se cambien los permisos del grupo.
+Telegram te pedirá:
+
+1. Crear un nuevo canal o seleccionar uno existente donde el bot tenga permiso de publicar
+2. Ponerle nombre al canal
+3. Configurar si es público o privado y añadir a las personas que quieran recibir las notificaciones
+
+El enlace otorga automáticamente al bot el permiso de **publicar mensajes**, que es el único que necesita.
 
 ---
 
-## Paso 3: Obtener el chat_id del grupo
+## Paso 3: Obtener el chat_id del canal
 
-Para que el script pueda enviar mensajes al grupo, necesitamos su identificador numérico (`chat_id`).
+Para que el script pueda enviar mensajes al canal, necesitamos su identificador numérico (`chat_id`).
 
-1. Escribe cualquier mensaje en el grupo (un simple `hola` vale)
+1. Publica cualquier mensaje en el canal
 2. Abre en el navegador la siguiente URL, sustituyendo `<TOKEN>` por el token completo de tu bot:
 
 ```
 https://api.telegram.org/bot<TOKEN>/getUpdates
 ```
 
-3. En el JSON de respuesta, busca el campo `"chat":{"id":-XXXXXXXXXX}` dentro del bloque del grupo. El `chat_id` es ese número negativo
+3. En el JSON de respuesta, busca el campo `"chat":{"id":-100XXXXXXXXXX}` dentro del bloque del canal. El `chat_id` de los canales empieza siempre por `-100`
 
-> Si `result` aparece vacío, asegúrate de haber escrito algo en el grupo **después** de añadir al bot, y recarga la página.
+> Si `result` aparece vacío, asegúrate de haber publicado algo en el canal **después** de añadir al bot, y recarga la página.
 {: .prompt-tip }
 
 ---
@@ -132,7 +137,7 @@ nano config.json
 | Parámetro | Descripción |
 | --- | --- |
 | `telegram_bot_token` | Token del bot obtenido de @BotFather |
-| `telegram_chat_id` | ID numérico del grupo (negativo) |
+| `telegram_chat_id` | ID numérico del canal (negativo, empieza por `-100`) |
 | `jellyfin_url` | URL de Jellyfin. Si está en la misma máquina, `http://localhost:8096` |
 | `jellyfin_api_key` | API Key generada en el panel de Jellyfin |
 | `poll_interval_seconds` | Intervalo de comprobación en segundos (300 = 5 minutos) |
