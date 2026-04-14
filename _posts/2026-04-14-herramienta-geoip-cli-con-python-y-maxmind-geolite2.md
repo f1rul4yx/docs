@@ -14,13 +14,13 @@ Guía para construir un comando `geoip` propio que resuelve país, ciudad, coord
 Un comando de sistema que funciona así:
 
 ```
-$ geoip 90.68.203.252
-IP: 90.68.203.252
+$ geoip 8.8.4.4
+IP: 8.8.4.4
 ----------------------
-Country: ES Spain
-City:    Seville
-Coords:  37.298, -5.937
-ASN:     12479 Orange Espagne SA
+Country: US
+City: Westfield
+Coords: 42.1293 -72.7522
+ASN: 15169 Google LLC
 ```
 
 ---
