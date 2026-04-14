@@ -183,18 +183,18 @@ sudo chmod +x /usr/local/bin/geoip
 ## Paso 5: Probar
 
 ```bash
-geoip 8.8.8.8
+geoip 8.8.4.4
 ```
 
 Salida esperada:
 
 ```
-IP: 8.8.8.8
+IP: 8.8.4.4
 ----------------------
-Country: US United States
-City:    Unknown
-Coords:  37.751, -97.822
-ASN:     15169 Google LLC
+Country: US
+City: Westfield
+Coords: 42.1293 -72.7522
+ASN: 15169 Google LLC
 ```
 
 > Que `City` salga como `Unknown` en IPs de grandes proveedores (Google, Cloudflare, AWS...) es **completamente normal**. GeoLite2 no asigna ciudad a IPs de infraestructura. Con IPs residenciales o de ISP sí suele aparecer la ciudad.
