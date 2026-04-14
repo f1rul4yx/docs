@@ -130,7 +130,9 @@ tls-auth ta.key 0
 server 10.8.0.0 255.255.255.0
 push "route 192.168.0.0 255.255.252.0"
 keepalive 10 120
-verb 3
+log /var/log/openvpn.log
+status /var/log/openvpn-status.log
+verb 4
 ```
 
 ### Explicación de cada parámetro
@@ -148,7 +150,9 @@ verb 3
 | `server 10.8.0.0 255.255.255.0` | Define la subred del túnel VPN. El servidor se asigna `10.8.0.1` y los clientes reciben IPs del rango `10.8.0.0/24`. |
 | `push "route 192.168.0.0 255.255.252.0"` | Envía al cliente una ruta hacia nuestra red LAN `/22`. Así el cliente sabe que para llegar a `192.168.0.0/22` debe enviar el tráfico por el túnel VPN. |
 | `keepalive 10 120` | Envía un ping cada 10 segundos. Si no hay respuesta en 120 segundos, considera la conexión caída y la reinicia. |
-| `verb 3` | Nivel de detalle de los logs. `3` es un buen equilibrio entre información útil y no saturar los logs. |
+| `log /var/log/openvpn.log` | Redirige los logs del servidor a un fichero en disco. Se sobreescribe en cada reinicio del servicio. |
+| `status /var/log/openvpn-status.log` | Escribe periódicamente el estado actual de las conexiones activas (clientes conectados, IPs asignadas, bytes transferidos). |
+| `verb 4` | Nivel de detalle de los logs. `4` incluye información de conexión/desconexión y errores detallados. |
 
 ## Paso 5: Activar el reenvío de paquetes (IP forwarding)
 
