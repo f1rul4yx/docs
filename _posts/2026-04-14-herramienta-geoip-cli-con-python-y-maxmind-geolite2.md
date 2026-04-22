@@ -17,9 +17,9 @@ Un comando de sistema que funciona así:
 $ geoip 8.8.4.4
 IP: 8.8.4.4
 ----------------------
-Country: US
-City: Westfield
-Coords: 42.1293 -72.7522
+Country: United States
+City: None
+Coords: 37.751 -97.822
 ASN: 15169 Google LLC
 ```
 
@@ -133,7 +133,7 @@ import sys
 import maxminddb
 
 if len(sys.argv) != 2:
-    print(f"Uso: {sys.argv[0]} <IP>")
+    print("Uso: geoip <IP>")
     sys.exit(1)
 
 ip = sys.argv[1]
@@ -151,23 +151,15 @@ print(f"IP: {ip}")
 print("----------------------")
 
 if c:
-    country     = c.get("country", {})
-    city        = c.get("city", {}).get("names", {}).get("en") or "Unknown"
-    loc         = c.get("location", {})
-    country_iso = country.get("iso_code", "?")
-    country_name= country.get("names", {}).get("en", "?")
-    lat         = loc.get("latitude", "?")
-    lon         = loc.get("longitude", "?")
-    print(f"Country: {country_iso} {country_name}")
-    print(f"City:    {city}")
-    print(f"Coords:  {lat}, {lon}")
+    print("Country:", c.get("country", {}).get("names", {}).get("en"))
+    print("City:", c.get("city", {}).get("names", {}).get("en"))
+    loc = c.get("location", {})
+    print("Coords:", loc.get("latitude"), loc.get("longitude"))
 else:
     print("City data: not found")
 
 if a:
-    asn_num = a.get("autonomous_system_number", "?")
-    asn_org = a.get("autonomous_system_organization", "Unknown")
-    print(f"ASN:     {asn_num} {asn_org}")
+    print("ASN:", a.get("autonomous_system_number"), a.get("autonomous_system_organization"))
 else:
     print("ASN data: not found")
 ```
@@ -191,13 +183,13 @@ Salida esperada:
 ```
 IP: 8.8.4.4
 ----------------------
-Country: US
-City: Westfield
-Coords: 42.1293 -72.7522
+Country: United States
+City: None
+Coords: 37.751 -97.822
 ASN: 15169 Google LLC
 ```
 
-> Que `City` salga como `Unknown` en IPs de grandes proveedores (Google, Cloudflare, AWS...) es **completamente normal**. GeoLite2 no asigna ciudad a IPs de infraestructura. Con IPs residenciales o de ISP sí suele aparecer la ciudad.
+> Que `City` salga como `None` en IPs de grandes proveedores (Google, Cloudflare, AWS...) es **completamente normal**. GeoLite2 no asigna ciudad a IPs de infraestructura. Con IPs residenciales o de ISP sí suele aparecer la ciudad.
 {: .prompt-tip }
 
 ---
