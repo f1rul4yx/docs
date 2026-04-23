@@ -64,7 +64,7 @@ Puedes encontrarme en mis redes profesionales o contactar conmigo si quieres com
 
 - 💼 [LinkedIn](https://www.linkedin.com/in/diegovargasgomezderequena)
 - 🖥️ [GitHub](https://github.com/f1rul4yx)
-- ✉️ [Correo electrónico](mailto:vargasgomezderequenadiego@gmail.com)
+- ✉️ [Correo electrónico](mailto:hola@diegovargas.es)
 
 ---
 
