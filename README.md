@@ -20,5 +20,5 @@ Para que se ejecute el script `update.sh` cada 5 minutos y se apliquen así los 
 
 ```bash
 crontab -e
-*/5 * * * * ~/docs/tools/update.sh >> ~/update.log 2>&1
+*/5 * * * * /opt/docs/tools/update.sh >> /var/log/docs-update.log 2>&1
 ```

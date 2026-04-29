@@ -2,7 +2,7 @@
 
 export GEM_HOME="$HOME/gems"
 export PATH="$HOME/gems/bin:$PATH"
-repo=~/docs/
+repo=/opt/docs/
 
 cd "$repo"
 
@@ -18,5 +18,4 @@ if [ "$BEFORE" = "$AFTER" ]; then
 fi
 
 JEKYLL_ENV=production bundle exec jekyll build
-sudo rsync -av --delete _site/ /var/www/html/
-sudo chown -R www-data:www-data /var/www/html/
+rsync -av --delete _site/ /var/www/docs/
