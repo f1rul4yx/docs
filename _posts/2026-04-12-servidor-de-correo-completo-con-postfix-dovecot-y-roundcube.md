@@ -20,21 +20,21 @@ El servidor de correo se divide en tres máquinas:
 ```
                           INTERNET
                              │
-            ┌────────────────┼─────────────────┐
+            ┌────────────────┼──────────────────┐
             ▼                                   ▼
 ┌─────────────────────┐              ┌────────────────────────────┐
 │   VPS (relay)       │              │  Homelab (Proxmox)         │
 │   IP fija pública   │              │  IP dinámica               │
 │                     │              │                            │
-│   Postfix           │              │  ┌─ LXC Proxy ──────────┐ │
-│   ├ :25  ← mundo    │   ─:2525─►  │  │  Nginx + wildcard SSL │ │
+│   Postfix           │              │  ┌─ LXC Proxy ───────────┐ │
+│   ├ :25  ← mundo    │   ─:2525─►   │  │  Nginx + wildcard SSL │ │
 │   ├ :587 ← casa     │              │  └───────────────────────┘ │
 │   └ :25  → mundo    │              │                            │
-│                     │   ◄─:587──  │  ┌─ LXC Correo ──────────┐ │
-│   PTR ✓  TLS ✓      │              │  │  Postfix    :25/2525   │ │
-│                     │              │  │  Dovecot    :993       │ │
-└─────────────────────┘              │  │  OpenDKIM   :8891      │ │
-                                     │  │  Roundcube  :80        │ │
+│                     │   ◄─:587──   │  ┌─ LXC Correo ──────────┐ │
+│   PTR ✓  TLS ✓      │              │  │  Postfix    :25/2525  │ │
+│                     │              │  │  Dovecot    :993      │ │
+└─────────────────────┘              │  │  OpenDKIM   :8891     │ │
+                                     │  │  Roundcube  :80       │ │
                                      │  └───────────────────────┘ │
                                      └────────────────────────────┘
 ```
