@@ -20,21 +20,21 @@ El servidor de correo se divide en tres máquinas:
 ```
                           INTERNET
                              │
-            ┌────────────────┼──────────────────┐
+            ┌────────────────┼─────────────────┐
             ▼                                   ▼
 ┌─────────────────────┐              ┌────────────────────────────┐
 │   VPS (relay)       │              │  Homelab (Proxmox)         │
 │   IP fija pública   │              │  IP dinámica               │
 │                     │              │                            │
-│   Postfix           │              │  ┌─ LXC Proxy ───────────┐ │
-│   ├ :25  ← mundo    │   ─:2525─►   │  │  Nginx + wildcard SSL │ │
+│   Postfix           │              │  ┌─ LXC Proxy ──────────┐ │
+│   ├ :25  ← mundo    │   ─:2525─►  │  │  Nginx + wildcard SSL │ │
 │   ├ :587 ← casa     │              │  └───────────────────────┘ │
 │   └ :25  → mundo    │              │                            │
-│                     │   ◄─:587──   │  ┌─ LXC Correo ──────────┐ │
-│   PTR ✓  TLS ✓      │              │  │  Postfix    :25/2525  │ │
-│                     │              │  │  Dovecot    :993      │ │
-└─────────────────────┘              │  │  OpenDKIM   :8891     │ │
-                                     │  │  Roundcube  :80       │ │
+│                     │   ◄─:587──  │  ┌─ LXC Correo ──────────┐ │
+│   PTR ✓  TLS ✓      │              │  │  Postfix    :25/2525   │ │
+│                     │              │  │  Dovecot    :993       │ │
+└─────────────────────┘              │  │  OpenDKIM   :8891      │ │
+                                     │  │  Roundcube  :80        │ │
                                      │  └───────────────────────┘ │
                                      └────────────────────────────┘
 ```
@@ -66,13 +66,16 @@ Antes de tocar ningún servidor, configura los registros DNS. Los registros de c
 | --- | --- | --- | --- |
 | A | `mail` | IP del VPS | OFF |
 | MX | `@` | `mail.tudominio.es` (prioridad 10) | — |
-| TXT | `@` | `v=spf1 a mx a:mail.tudominio.es a:home.tudominio.es ~all` | — |
-| TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:tu@tudominio.es` | — |
+| TXT | `@` | `v=spf1 a:mail.tudominio.es -all` | — |
+| TXT | `_dmarc` | `v=DMARC1; p=quarantine; rua=mailto:admin@tudominio.es` | — |
 
 El registro DKIM se añade más adelante cuando se generen las claves.
 
 > El registro A de `home.tudominio.es` (tu IP dinámica) también debe tener el proxy desactivado si lo vas a usar para recibir correo.
 {: .prompt-warning }
+
+> El SPF con `-all` (hard fail) es más estricto que `~all` (soft fail). Significa que cualquier servidor que no esté listado será rechazado directamente. Es lo recomendable cuando solo envías correo desde el VPS.
+{: .prompt-info }
 
 ### Verificar propagación
 
@@ -118,7 +121,7 @@ dig -x IP_DEL_VPS +short
 ```bash
 apt install -y certbot
 certbot certonly --standalone -d mail.tudominio.es \
-  --agree-tos --no-eff-email --email tu@tudominio.es
+  --agree-tos --no-eff-email --email admin@tudominio.es
 ```
 
 ### Instalar Postfix
@@ -317,7 +320,7 @@ chmod 600 /etc/postfix/sasl_passwd /etc/postfix/sasl_passwd.db
 Crea `/etc/postfix/virtual_mailbox`:
 
 ```
-tu@tudominio.es    OK
+admin@tudominio.es    OK
 ```
 
 ```bash
@@ -435,7 +438,7 @@ nano /etc/dovecot/users
 ```
 
 ```
-tu@tudominio.es:{BLF-CRYPT}$2y$05$HASH_COMPLETO
+admin@tudominio.es:{BLF-CRYPT}$2y$05$HASH_COMPLETO
 ```
 
 ```bash
@@ -488,20 +491,20 @@ protocol lda {
   mail_plugins {
     sieve = yes
   }
-  postmaster_address = tu@tudominio.es
+  postmaster_address = admin@tudominio.es
 }
 
 protocol lmtp {
   mail_plugins {
     sieve = yes
   }
-  postmaster_address = tu@tudominio.es
+  postmaster_address = admin@tudominio.es
 }
 ```
 
 #### conf.d/20-lmtp.conf
 
-Si existe una línea `auth_username_format` en este fichero, **coméntala**. Si está activa con el valor `%{user | username | lower}`, transforma `tu@tudominio.es` en `tu` antes de buscarlo en el fichero de usuarios, y como en el fichero está como `tu@tudominio.es`, no lo encuentra y devuelve `User doesn't exist`.
+Si existe una línea `auth_username_format` en este fichero, **coméntala**. Si está activa con el valor `%{user | username | lower}`, transforma `admin@tudominio.es` en `admin` antes de buscarlo en el fichero de usuarios, y como en el fichero está como `admin@tudominio.es`, no lo encuentra y devuelve `User doesn't exist`.
 
 ### Instalar OpenDKIM
 
@@ -564,7 +567,7 @@ chmod 600 /root/.secrets/cloudflare.ini
 certbot certonly --dns-cloudflare \
   --dns-cloudflare-credentials /root/.secrets/cloudflare.ini \
   -d correo.tudominio.es \
-  --agree-tos --no-eff-email --email tu@tudominio.es
+  --agree-tos --no-eff-email --email admin@tudominio.es
 ```
 
 **Opción B: Usar un certificado wildcard generado en otra máquina** y copiarlo periódicamente con un script de deploy. En este caso los certificados se guardan en `/etc/ssl/tudominio/` y se distribuyen automáticamente tras cada renovación.
@@ -580,7 +583,7 @@ systemctl restart opendkim
 ss -tlnp | grep -E '25|587|993|2525|4190|8891'
 
 # Probar autenticación
-doveadm auth test tu@tudominio.es
+doveadm auth test admin@tudominio.es
 ```
 
 ---
@@ -742,7 +745,41 @@ nginx -t && systemctl reload nginx
 
 ---
 
-## Parte 6: Verificación y pruebas
+## Parte 6: Notificaciones de Proxmox
+
+Proxmox envía notificaciones del sistema (resultados de backups, alertas de disco, actualizaciones) por correo. Por defecto usa sendmail directamente desde el host, lo que provoca fallos de SPF y DKIM en los informes DMARC porque los correos salen desde tu IP de casa sin autenticación.
+
+Para solucionarlo, configura Proxmox para que envíe las notificaciones a través de tu servidor de correo:
+
+**1.** En el host Proxmox, añade la resolución local para que el certificado SSL coincida:
+
+```bash
+echo "IP_LXC_CORREO    correo.tudominio.es" >> /etc/hosts
+```
+
+Esto es necesario porque el certificado es para `*.tudominio.es` y si Proxmox se conecta por IP directa, la verificación SSL falla con `certificate verify failed: IP address mismatch`.
+
+**2.** En Proxmox → Datacenter → Notifications → Targets → Add → SMTP:
+
+| Campo | Valor |
+| --- | --- |
+| Endpoint Name | `correo` |
+| Server | `correo.tudominio.es` |
+| Port | `587` |
+| Encryption | `STARTTLS` |
+| Authenticate | ✅ |
+| Username | `admin@tudominio.es` |
+| Password | tu contraseña de correo |
+| From Address | `admin@tudominio.es` |
+| Recipient(s) | tu usuario de Proxmox (`root@pam`) |
+
+**3.** En Notification Matchers → selecciona `default-matcher` → Modify → pestaña Targets to notify → desmarca `mail-to-root` y marca `correo`.
+
+**4.** Haz clic en Test en el target para verificar que llega el correo.
+
+---
+
+## Parte 7: Verificación y pruebas
 
 ### Probar login
 
@@ -758,7 +795,7 @@ Roundcube → Postfix local (:587) → OpenDKIM firma → VPS relay (:587 SASL) 
 
 ### Probar recepción
 
-Envía un correo desde Gmail a `tu@tudominio.es`. El flujo es:
+Envía un correo desde Gmail a `admin@tudominio.es`. El flujo es:
 
 ```
 Gmail → VPS (MX, :25) → home.tudominio.es (:2525) → Postfix local → Dovecot (LMTP) → buzón
@@ -771,6 +808,38 @@ Envía un correo a [mail-tester.com](https://www.mail-tester.com/) y comprueba q
 ### Comprobar blacklists
 
 Visita [mxtoolbox.com/blacklists.aspx](https://mxtoolbox.com/blacklists.aspx) e introduce la IP del VPS.
+
+---
+
+## Configurar clientes de correo (móvil, Thunderbird)
+
+Para acceder al correo desde clientes externos (app del móvil, Thunderbird, etc.):
+
+### Servidor entrante (IMAP)
+
+| Campo | Valor |
+| --- | --- |
+| Servidor | `home.tudominio.es` |
+| Seguridad | SSL/TLS |
+| Puerto | 993 |
+| Autenticación | Contraseña normal |
+| Usuario | `admin@tudominio.es` |
+
+### Servidor saliente (SMTP)
+
+| Campo | Valor |
+| --- | --- |
+| Servidor | `home.tudominio.es` |
+| Seguridad | STARTTLS |
+| Puerto | 587 |
+| Autenticación | Contraseña normal |
+| Usuario | `admin@tudominio.es` |
+
+> No uses el puerto 465 (SMTPS) ya que no está configurado. El puerto 587 usa STARTTLS, no SSL/TLS directo.
+{: .prompt-warning }
+
+> Necesitas port forwarding de los puertos 993 y 587 en tu router hacia el LXC de correo.
+{: .prompt-info }
 
 ---
 
@@ -798,7 +867,7 @@ systemctl reload postfix dovecot
 Crea o edita `/etc/postfix/virtual_alias`:
 
 ```
-contacto@tudominio.es    tu@tudominio.es
+contacto@tudominio.es    admin@tudominio.es
 ```
 
 ```bash
@@ -872,7 +941,7 @@ Verificar que Dovecot escucha y la autenticación funciona:
 
 ```bash
 ss -tlnp | grep 993
-doveadm auth test tu@tudominio.es
+doveadm auth test admin@tudominio.es
 ```
 
 ### SASL authentication failed (No worthy mechs found)
@@ -900,11 +969,19 @@ Comprobar que `auth_username_format` no está transformando el usuario en `conf.
 
 ### Correo llega a spam
 
-Verificar SPF, DKIM y DMARC con [mail-tester.com](https://www.mail-tester.com/). Comprobar PTR del VPS. Verificar que la IP no está en blacklists.
+Verificar SPF, DKIM y DMARC con [mail-tester.com](https://www.mail-tester.com/). Comprobar PTR del VPS. Verificar que la IP no está en blacklists. Con servidores nuevos, Microsoft/Hotmail puede tardar días o semanas en confiar en tu IP. Registra tu IP en [SNDS de Microsoft](https://sendersupport.olc.protection.outlook.com/snds/) y solicita revisión en [sender.office.com](https://sender.office.com/) si persiste.
 
 ### Connection timed out al recibir
 
 El port forwarding del 2525 no funciona o el proxy de Cloudflare está activado en `home.tudominio.es`. Verificar que resuelve a tu IP real, no a una IP de Cloudflare.
+
+### Informes DMARC con fallos de pve1.tudominio.es
+
+Proxmox está enviando notificaciones directamente sin pasar por el servidor de correo. Configurar el target SMTP en Proxmox como se explica en la Parte 6.
+
+### Certificate verify failed al enviar desde Proxmox
+
+Proxmox se conecta por IP al LXC de correo pero el certificado es para `*.tudominio.es`. Añadir la resolución local en `/etc/hosts` del host Proxmox apuntando `correo.tudominio.es` a la IP del LXC.
 
 ---
 
