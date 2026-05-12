@@ -369,6 +369,52 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 > **Nota:** `grub-mkconfig` detecta automáticamente el microcódigo instalado y lo incluye en la configuración.
 
+### Detectar otros sistemas operativos (os-prober)
+
+Si tienes instalado Windows (o cualquier otro sistema) en el mismo equipo, instala `os-prober` para que GRUB lo detecte automáticamente:
+
+```bash
+pacman -S os-prober
+
+# Editar /etc/default/grub y cambiar (o añadir):
+# GRUB_DISABLE_OS_PROBER=false
+nano /etc/default/grub
+
+# Regenerar la configuración
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
+### Configurar el orden de arranque de GRUB
+
+Edita `/etc/default/grub`:
+
+```bash
+nano /etc/default/grub
+```
+
+**Opción A — Windows como predeterminado:**
+
+```bash
+# Ver el nombre exacto de las entradas disponibles
+grep menuentry /boot/grub/grub.cfg
+
+# Cambia GRUB_DEFAULT por el nombre de la entrada de Windows
+GRUB_DEFAULT="Windows Boot Manager (on /dev/sda1)"
+```
+
+**Opción B — Recordar la última opción usada:**
+
+```
+GRUB_DEFAULT=saved
+GRUB_SAVEDEFAULT=true
+```
+
+En ambos casos, regenera la configuración después del cambio:
+
+```bash
+grub-mkconfig -o /boot/grub/grub.cfg
+```
+
 ---
 
 ## Paso 7: Red y servicios esenciales
@@ -419,6 +465,13 @@ systemctl enable sddm
 # Ejemplo con GDM (GNOME)
 systemctl enable gdm
 ```
+
+> **ly** es un gestor de pantalla minimalista en modo texto (TUI). A diferencia de SDDM o GDM, no necesita un servidor gráfico para la pantalla de inicio de sesión:
+>
+> ```bash
+> pacman -S ly
+> systemctl enable ly@tty1
+> ```
 
 ### Herramientas recomendadas
 
