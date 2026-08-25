@@ -67,9 +67,9 @@ Creo que la mejor forma de aprender es **experimentando y documentando**, y esta
 
 Puedes descargar mi currículum para más detalle sobre mi formación y experiencia:
 
-[CV en Español](/assets/cv/es.html)
-[CV in English](/assets/cv/en.html)
-[CV en Français](/assets/cv/fr.html)
+- [En Español](/assets/cv/es.html)
+- [In English](/assets/cv/en.html)
+- [En Français](/assets/cv/fr.html)
 
 ---
 
