@@ -65,9 +65,11 @@ Creo que la mejor forma de aprender es **experimentando y documentando**, y esta
 
 ## Currículum
 
-Puedes descargar mi currículum en formato PDF para más detalle sobre mi formación y experiencia:
+Puedes descargar mi currículum para más detalle sobre mi formación y experiencia:
 
-[Descargar currículum (PDF)](/assets/pdf/cv.pdf)
+[CV en Español](/assets/cv/es.html)
+[CV in English](/assets/cv/en.html)
+[CV en Français](/assets/cv/fr.html)
 
 ---
 

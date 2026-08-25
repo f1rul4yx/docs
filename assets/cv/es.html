@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CV - Diego Vargas Gómez de Requena</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      color: #1a1a2e;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .cv {
+      width: 210mm;
+      min-height: 297mm;
+      max-height: 297mm;
+      background: #fff;
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      overflow: hidden;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      background: #1a1a2e;
+      color: #e0e0e0;
+      padding: 32px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .sidebar .name {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.3;
+      letter-spacing: -0.3px;
+    }
+
+    .sidebar .photo {
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: 3px solid #0f3460;
+      margin: 0 auto 4px;
+      display: block;
+    }
+
+    .sidebar-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sidebar-section h3 {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #53a8b6;
+      border-bottom: 1px solid #16213e;
+      padding-bottom: 6px;
+    }
+
+    .sidebar-section ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sidebar-section li {
+      font-size: 9.5px;
+      line-height: 1.4;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .sidebar-section li .icon {
+      flex-shrink: 0;
+      width: 14px;
+      text-align: center;
+      color: #53a8b6;
+      font-size: 10px;
+      margin-top: 1px;
+    }
+
+    .sidebar-section li a {
+      color: #c8d6e5;
+      text-decoration: none;
+    }
+
+    .sidebar-section li a:hover {
+      color: #fff;
+    }
+
+    .personal-info span.label {
+      color: #7f8c8d;
+      font-size: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+    }
+
+    .personal-info span.value {
+      color: #e0e0e0;
+      font-size: 9.5px;
+    }
+
+    .personal-info .info-item {
+      margin-bottom: 4px;
+    }
+
+    /* Skills */
+    .skills-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+    }
+
+    .skill-tag {
+      font-size: 8.5px;
+      background: #16213e;
+      color: #c8d6e5;
+      padding: 3px 7px;
+      border-radius: 3px;
+      border: 1px solid #0f3460;
+    }
+
+    .skill-tag.highlight {
+      background: #0f3460;
+      color: #53a8b6;
+      border-color: #53a8b6;
+    }
+
+    /* === MAIN CONTENT === */
+    .main {
+      padding: 30px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .main-header {
+      border-bottom: 2px solid #1a1a2e;
+      padding-bottom: 12px;
+    }
+
+    .main-header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1a2e;
+      letter-spacing: -0.5px;
+    }
+
+    .main-header p {
+      font-size: 11px;
+      color: #636e72;
+      margin-top: 4px;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #1a1a2e;
+      padding-bottom: 4px;
+      border-bottom: 2px solid #53a8b6;
+      display: inline-block;
+      align-self: flex-start;
+    }
+
+    .about-text {
+      font-size: 10.5px;
+      color: #2d3436;
+      line-height: 1.6;
+    }
+
+    /* Experience & Education items */
+    .timeline-item {
+      position: relative;
+      padding-left: 16px;
+      border-left: 2px solid #dfe6e9;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -5px;
+      top: 4px;
+      width: 8px;
+      height: 8px;
+      background: #53a8b6;
+      border-radius: 50%;
+    }
+
+    .timeline-item .company {
+      font-size: 11px;
+      font-weight: 600;
+      color: #1a1a2e;
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .timeline-item .company .date {
+      font-size: 9px;
+      font-weight: 400;
+      color: #636e72;
+      white-space: nowrap;
+    }
+
+    .timeline-item .role {
+      font-size: 10px;
+      color: #53a8b6;
+      font-weight: 500;
+      margin-top: 1px;
+    }
+
+    .timeline-item .location {
+      font-size: 9px;
+      color: #b2bec3;
+      font-style: italic;
+    }
+
+    .timeline-item ul {
+      margin-top: 4px;
+      padding-left: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .timeline-item li {
+      font-size: 9.5px;
+      color: #2d3436;
+      line-height: 1.45;
+    }
+
+    .timeline-item li::marker {
+      color: #53a8b6;
+    }
+
+    /* Print */
+    @media print {
+      body {
+        background: none;
+        padding: 0;
+      }
+      .cv {
+        box-shadow: none;
+        width: 210mm;
+        height: 297mm;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="cv">
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <img src="foto.jpg" alt="Foto de perfil" class="photo">
+
+      <div class="sidebar-section personal-info">
+        <h3> Datos personales </h3>
+        <div class="info-item">
+          <span class="label">Teléfono</span>
+          <span class="value">(+34) 722 681 061</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Email</span>
+          <span class="value">hola@diegovargas.es</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Domicilio</span>
+          <span class="value">c/ Hojiblanca, 20<br>41702 Sevilla</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Nacimiento</span>
+          <span class="value">17/02/2003</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Nacionalidad</span>
+          <span class="value">Española</span>
+        </div>
+        <div class="info-item">
+          <span class="label">Carnet de conducir</span>
+          <span class="value">B</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3> Enlaces </h3>
+        <ul>
+          <li>
+            <span class="icon">in</span>
+            <a href="https://www.linkedin.com/in/diegovargasgomezderequena/" target="_blank">LinkedIn</a>
+          </li>
+          <li>
+            <span class="icon">&#9679;</span>
+            <a href="https://github.com/f1rul4yx" target="_blank">GitHub</a>
+          </li>
+          <li>
+            <span class="icon">&#9673;</span>
+            <a href="https://docs.diegovargas.es" target="_blank">docs.diegovargas.es</a>
+          </li>
+        </ul>
+      </div>
+
+      <div class="sidebar-section">
+        <h3> Tecnologías </h3>
+        <div class="skills-grid">
+          <span class="skill-tag highlight">Linux</span>
+          <span class="skill-tag highlight">Bash</span>
+          <span class="skill-tag highlight">Docker</span>
+          <span class="skill-tag highlight">Kubernetes</span>
+          <span class="skill-tag highlight">Proxmox</span>
+          <span class="skill-tag highlight">Git</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">SQL / NoSQL</span>
+          <span class="skill-tag">Apache / Nginx</span>
+          <span class="skill-tag">PHP</span>
+          <span class="skill-tag">Ansible</span>
+          <span class="skill-tag">Terraform</span>
+          <span class="skill-tag">Jenkins</span>
+          <span class="skill-tag">Cloud</span>
+          <span class="skill-tag">KVM</span>
+          <span class="skill-tag">TCP/IP</span>
+          <span class="skill-tag">Postfix</span>
+          <span class="skill-tag">Dovecot</span>
+          <span class="skill-tag">Roundcube</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3> Idiomas </h3>
+        <ul>
+          <li>
+            <span class="icon">&#9679;</span>
+            <span>Español &mdash; Nativo</span>
+          </li>
+          <li>
+            <span class="icon">&#9679;</span>
+            <span>Inglés &mdash; B1 (Intermedio bajo)</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="main-header">
+        <h1>Diego Vargas Gómez de Requena</h1>
+        <p>Administración de Sistemas Informáticos en Red</p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"> Sobre mí </h2>
+        <p class="about-text">
+          Administrador de Sistemas con formación continua en entornos Linux. Experiencia internacional en 3 FCTs (España, Italia y Portugal) cubriendo mantenimiento de servidores, gestión de hosting y reparación de equipos. Apasionado del ecosistema open source, con homelab personal en Proxmox y proyectos de automatización con Bash.
+        </p>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"> Experiencia laboral </h2>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>Comvive &mdash; Sevilla, España</span>
+            <span class="date">02/2026 &ndash; 05/2026</span>
+          </div>
+          <div class="role">Técnico de Sistemas y Gestión de Hosting (FCT)</div>
+          <ul>
+            <li>Monitorización de servidores y respuesta inmediata ante caídas.</li>
+            <li>Gestión de tickets y resolución de problemas de clientes.</li>
+            <li>Mitigación de ataques externos y mantenimiento de servicios.</li>
+            <li>Automatización de tareas mediante scripts en Bash.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>Revolution Store &mdash; Barcellona Pozzo di Gotto, Italia</span>
+            <span class="date">03/2024 &ndash; 06/2024</span>
+          </div>
+          <div class="role">Técnico en sistemas informáticos (FCT)</div>
+          <ul>
+            <li>Reparación de equipos electrónicos (ordenadores, PS4, teléfonos).</li>
+            <li>Limpieza y mantenimiento de equipos electrónicos.</li>
+            <li>Preparación de equipos: instalación de SO, bypass Google.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>Innuos &mdash; Faro, Portugal</span>
+            <span class="date">04/2022 &ndash; 06/2022</span>
+          </div>
+          <div class="role">Montador de equipos electrónicos (FCT)</div>
+          <ul>
+            <li>Preparación de material (cables, soldadura de estaño, limado de chasis).</li>
+            <li>Montaje de equipos electrónicos.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"> Educación y formación </h2>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>IES Gonzalo Nazareno</span>
+            <span class="date">09/2024 &ndash; 05/2026</span>
+          </div>
+          <div class="role">Ciclo Formativo Grado Superior &mdash; Administración de Sistemas Informáticos en Red</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>IES Gonzalo Nazareno</span>
+            <span class="date">09/2022 &ndash; 06/2024</span>
+          </div>
+          <div class="role">Ciclo Formativo Grado Medio &mdash; Sistemas Microinformáticos y Redes</div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>Colegio Bilingüe Antonio Gala</span>
+            <span class="date">09/2020 &ndash; 06/2022</span>
+          </div>
+          <div class="role">Formación Profesional Básica &mdash; Sistemas Microinformáticos y Redes</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title"> Proyectos </h2>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>Linux Customizer</span>
+            <span class="date">GitHub</span>
+          </div>
+          <div class="role">Script de automatización para entorno de escritorio en Debian</div>
+          <ul>
+            <li>Automatización de instalación y configuración de bspwm, kitty, polybar, picom y zsh.</li>
+            <li>Gestión de dependencias, atajos de teclado y personalización visual.</li>
+          </ul>
+        </div>
+
+        <div class="timeline-item">
+          <div class="company">
+            <span>Homelab personal</span>
+            <span class="date">Proxmox</span>
+          </div>
+          <div class="role">Entorno de virtualización con servicios auto-gestionados</div>
+          <ul>
+            <li>Despliegue de servicios: DHCP, AdGuard Home, reverse proxy, servidor de correos, VPN, Jellyfin, Nextcloud, Home Assistant, Immich y servidor de Minecraft.</li>
+            <li>Desarrollo y despliegue de aplicaciones propias mediante Docker.</li>
+          </ul>
+        </div>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
