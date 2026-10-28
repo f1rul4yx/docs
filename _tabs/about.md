@@ -77,9 +77,10 @@ Puedes descargar mi currículum para más detalle sobre mi formación y experien
 
 Puedes encontrarme en mis redes profesionales o contactar conmigo si quieres comentar algún proyecto, idea o colaboración:
 
-- [LinkedIn](https://www.linkedin.com/in/diegovargasgomezderequena)
+- [Portfolio](https://portfolio.diegovargas.es)
 - [GitHub](https://github.com/f1rul4yx)
-- [Correo electrónico](mailto:hola@diegovargas.es)
+- [LinkedIn](https://www.linkedin.com/in/diegovargasgomezderequena)
+- [Email](mailto:hola@diegovargas.es)
 
 ---
 
